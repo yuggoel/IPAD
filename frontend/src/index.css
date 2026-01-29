@@ -1,0 +1,470 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --screen-bg: #fff;
+  --text-color: #000;
+  --highlight-color: #3498db;
+  --header-bg: #f8f8f8;
+  --border-color: #ddd;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ipod-case {
+  width: 300px;
+  height: 500px;
+  background-color: #e0e0e0;
+  border-radius: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ccc;
+}
+
+.screen {
+  width: 100%;
+  height: 220px;
+  background-color: #fff;
+  border: 2px solid #333;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.screen[data-dark="true"] {
+  background-color: #0f0f0f;
+  color: #f0f0f0;
+  border-color: #000;
+}
+
+.status-bar {
+  height: 20px;
+  background-color: #eee;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
+  font-size: 10px;
+  color: #555;
+}
+
+.battery {
+  width: 20px;
+  height: 8px;
+  border: 1px solid #555;
+  padding: 1px;
+  position: relative;
+}
+
+.battery-level {
+  width: 70%;
+  height: 100%;
+  background-color: #555;
+}
+
+.menu-container, .list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* --- iPod Specific Visuals --- */
+
+/* Marquee Effect for Long Text */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+}
+
+.marquee-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
+}
+
+/* Album Art Reflection */
+.album-art-reflection {
+  -webkit-box-reflect: below 2px linear-gradient(transparent, transparent 70%, rgba(255,255,255,0.3));
+}
+
+/* Custom Progress Bar CSS removed as it is now inline in component to force visibility */
+.progress-bar-container-legacy {
+  width: 100%;
+  height: 8px; /* Slightly thicker background */
+  background: #ccc;
+  border-radius: 2px;
+  position: relative;
+  border: 1px solid #aaa;
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.progress-bar-fill-legacy {
+  height: 100%;
+  background: linear-gradient(to bottom, #7abcff 0%, #4096ee 50%, #4096ee 100%); /* Classic Blue Glass Look */
+  border-radius: 1px;
+  position: relative;
+}
+
+/* Diamond Scrubber */
+.scrubber-diamond {
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 30% 30%, #fff, #bbb);
+  border: 1px solid #555;
+  transform: rotate(45deg);
+  position: absolute;
+  right: -6px;
+  top: -3px; /* Center partially overlap */
+  box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Volume Overlay (Mini) */
+.volume-overlay {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.volume-overlay.visible {
+  opacity: 1;
+}
+
+.menu-header {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  height: 30px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+  color: var(--highlight-color);
+  font-weight: bold;
+}
+
+.menu-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+}
+
+.menu-list, .list-content {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.menu-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  transition: background-color 0.15s;
+}
+
+.screen[data-dark="true"] .menu-item {
+  border-bottom: 1px solid #1f1f1f;
+  color: #d0d0d0;
+}
+
+.menu-item.active {
+  background-color: var(--highlight-color);
+  color: white;
+}
+
+.menu-item.active .arrow {
+  color: white;
+}
+
+.music-list-item-wrapper.active {
+  background-color: var(--highlight-color);
+  color: white;
+}
+
+.music-list-item-wrapper.active .music-subtitle {
+  color: #eee;
+}
+
+.arrow {
+  color: #ccc;
+  font-weight: bold;
+}
+
+.music-item {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.music-title {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.music-subtitle {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.loading, .error, .empty {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.error {
+  color: red;
+}
+
+.game-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #222;
+  color: #fff;
+}
+
+.game-placeholder {
+  text-align: center;
+}
+
+.game-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.blink {
+  animation: blinker 1s linear infinite;
+  font-size: 12px;
+  margin-top: 10px;
+  color: #aaa;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.detail-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-text {
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.slider-bar {
+  width: 150px;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.slider-fill {
+  height: 100%;
+  background-color: var(--highlight-color);
+}
+
+/* Click Wheel Simulation */
+.click-wheel {
+  width: 180px;
+  height: 180px;
+  background-color: #fff;
+  border-radius: 50%;
+  margin-top: 30px;
+  position: relative;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.wheel-btn {
+  position: absolute;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.center-button {
+  width: 60px;
+  height: 60px;
+  background-color: #ddd;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 20;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  transition: all 0.1s;
+}
+
+.center-button:active {
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+  transform: translate(-50%, -50%) scale(0.95);
+}
+
+.menu-btn {
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: bold;
+  color: #999;
+  height: 30px;
+}
+
+.play-pause-btn {
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 30px;
+}
+
+.play-pause-btn::before {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-left: 5px solid #999;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  margin-right: 2px;
+}
+
+.play-pause-btn::after {
+  content: '';
+  width: 2px;
+  height: 8px;
+  background-color: #999;
+  box-shadow: 4px 0 0 #999;
+  margin-left: 2px;
+}
+
+.forward-btn {
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+}
+
+.forward-btn::before {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-left: 6px solid #999;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+
+.forward-btn::after {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-left: 6px solid #999;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  margin-left: -2px;
+}
+
+.backward-btn {
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+}
+
+.backward-btn::before {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-right: 6px solid #999;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+
+.backward-btn::after {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-right: 6px solid #999;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  margin-left: -2px;
+}
+

@@ -23,6 +23,10 @@ function lightenColor(hex, percent) {
 
 function IpodCase() {
   const { theme } = useIpod();
+  const [rotation, setRotation] = React.useState({ x: 5, y: -8 });
+  const [isInteracting, setIsInteracting] = React.useState(false);
+  const ipodRef = React.useRef(null);
+  const animationRef = React.useRef(null);
   
   // Generate dynamic color palette based on iPod color
   const fluidColors = React.useMemo(() => {
@@ -34,8 +38,69 @@ function IpodCase() {
     ];
   }, [theme.caseColor]);
   
+  // Smooth animation using requestAnimationFrame
+  const smoothRotate = (targetX, targetY) => {
+    const currentX = rotation.x;
+    const currentY = rotation.y;
+    
+    const deltaX = (targetX - currentX) * 0.1;
+    const deltaY = (targetY - currentY) * 0.1;
+    
+    if (Math.abs(deltaX) > 0.01 || Math.abs(deltaY) > 0.01) {
+      setRotation({ x: currentX + deltaX, y: currentY + deltaY });
+      animationRef.current = requestAnimationFrame(() => smoothRotate(targetX, targetY));
+    }
+  };
+  
+  // Advanced 3D rotation with parallax effect
+  const handleMouseMove = (e) => {
+    if (!ipodRef.current) return;
+    
+    const rect = ipodRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    
+    // Enhanced rotation with damping
+    const maxRotation = 25;
+    const rotateY = ((mouseX - centerX) / rect.width) * maxRotation;
+    const rotateX = ((centerY - mouseY) / rect.height) * maxRotation;
+    
+    setIsInteracting(true);
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+    setRotation({ x: rotateX, y: rotateY });
+  };
+  
+  const handleMouseLeave = () => {
+    setIsInteracting(false);
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+    smoothRotate(5, -8);
+  };
+  
+  // Gyroscopic effect on mouse enter
+  const handleMouseEnter = () => {
+    setIsInteracting(true);
+  };
+  
   return (
-    <div className="ipod-case" style={{ backgroundColor: theme.caseColor }}>
+    <div 
+      ref={ipodRef}
+      className="ipod-case" 
+      style={{ 
+        backgroundColor: theme.caseColor,
+        transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) ${isInteracting ? 'scale(1.02)' : 'scale(1)'}`,
+        willChange: 'transform'
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseEnter}
+    >
       <Screen />
       <ClickWheel />
     </div>

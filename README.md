@@ -1,4 +1,4 @@
-# IPAD — iPod-style Music Player (React + Vite)
+# IPOD — iPod-style Music Player (React + Vite)
 
 A stunning React project that emulates an iPod-style UI and music player with **advanced 3D effects**. Built with Vite and Tailwind CSS; the UI and app logic live under the `frontend` folder.
 
